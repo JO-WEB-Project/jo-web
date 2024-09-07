@@ -8,6 +8,12 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
+Route::get('/admin', function () {
+    return Inertia::render('Admin/Auth/Auth');
+});
+Route::get('/admin/register', function () {
+    return Inertia::render('Admin/Auth/Register');
+});
 
 
 // Route::get('/', function () {
@@ -29,4 +35,9 @@ Route::get('/', function () {
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-require __DIR__.'/auth.php';
+// // Rute Admin
+// Route::get('/admin', function () {
+//     return Inertia::render('admin/auth/Login');
+// })->middleware('guest');
+
+require __DIR__ . '/auth.php';
