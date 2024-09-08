@@ -1,0 +1,103 @@
+import React, { useState, useRef, useEffect } from "react";
+import { FiLogOut } from "react-icons/fi";
+import { LuSettings } from "react-icons/lu";
+import { TbLogout } from "react-icons/tb";
+
+
+const Avatar = () => {
+    const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const avatarRef = useRef(null);
+
+    const role = "Owner";
+
+    const fullName = "Fawwaz Fiebry Prayhoga Putra";
+    const firstName = fullName.split(" ")[0]; // Mengambil 1 kata depan
+
+    // Menampilkan dan menyembunyikan tooltip
+    const toggleTooltip = (visible) => {
+        setIsTooltipVisible(visible);
+    };
+
+    // Menampilkan dan menyembunyikan menu dropdown
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    // Menutup menu jika klik di luar komponen
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                avatarRef.current &&
+                !avatarRef.current.contains(event.target)
+            ) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <div
+            className="group relative inline-block rounded-lg hover:bg-slate-100 p-2 px-4"
+            ref={avatarRef}
+        >
+            {/* Avatar */}
+            <div
+                onClick={toggleMenu}
+                onMouseEnter={() => toggleTooltip(true)}
+                onMouseLeave={() => toggleTooltip(false)}
+                className="group-hover:cursor-pointer flex items-center"
+            >
+                <img
+                    src="/Assets/Images/Logo.png"
+                    alt="User Avatar"
+                    className="w-6 rounded-full"
+                />
+                <span className="ml-2 text-xs font-semibold text-black text-opacity-60">
+                    {firstName}
+                </span>
+                <span className="px-2 text-md font-semibold text-black text-opacity-60">
+                    |
+                </span>
+                <span className="text-xs font-semibold text-black text-opacity-60">
+                    {role}
+                </span>
+            </div>
+
+            {/* Tooltip */}
+            {isTooltipVisible && !isMenuOpen && (
+                <div className="absolute left-0 mt-4 text-xs p-2 w-auto bg-white rounded-md shadow-lg border border-gray-200">
+                    {fullName} | {role}
+                </div>
+            )}
+
+            {/* Dropdown Menu */}
+            {isMenuOpen && (
+                <div className="absolute right-0 mt-5 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+                    <div className="p-4 font-bold border-b border-gray-100">
+                        My Account
+                    </div>
+                    <ul className="py-2">
+                        <li className="px-4 py-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer">
+                            <span className="flex gap-4 text-sm items-center">
+                                <LuSettings size={20} /> Settings
+                            </span>
+                        </li>
+                        <li className="px-4 py-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer">
+                            <span className="flex gap-4 text-sm items-center">
+                                <TbLogout size={20} /> Log out
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Avatar;
