@@ -17,6 +17,8 @@ import { LiaMoneyBillWaveAltSolid } from "react-icons/lia";
 import { PiHourglassMediumDuotone } from "react-icons/pi";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { RiAdminLine } from "react-icons/ri";
+import { FaCheckDouble } from "react-icons/fa6";
+import { GoRows } from "react-icons/go";
 
 
 
@@ -36,7 +38,12 @@ const Aside = () => {
                   <AsideCategory>Pesanan</AsideCategory>
                   <AsideMenu
                       icon={<LuScrollText size={20} />}
-                      menu={"Pesanan Masuk"}
+                      menu={"Semua Pesanan"}
+                      path={"/admin/allOrders"}
+                  />
+                  <AsideMenu
+                      icon={<GoRows size={20} />}
+                      menu={"Antrean"}
                       path={"/admin/dashboard"}
                   />
                   <AsideMenu

@@ -17,6 +17,9 @@ Route::get('/admin/register', function () {
 Route::get('/admin/dashboard', function () {
     return Inertia::render('Admin/Dashboard');
 });
+Route::get('/admin/allOrders', function () {
+    return Inertia::render('Admin/AllOrders');
+});
 
 
 // Route::get('/', function () {
