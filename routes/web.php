@@ -22,6 +22,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/AllOrders', function () {
         return Inertia::render('Admin/AllOrders');
     });    
+    Route::get('/admin/adminmanagement', function () {
+        return Inertia::render('Admin/AdminMangement');
+    });
     
 });
 
