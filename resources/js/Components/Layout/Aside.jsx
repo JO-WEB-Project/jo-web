@@ -102,7 +102,7 @@ const Aside = () => {
                   <AsideMenu
                       icon={<RiAdminLine size={20} />}
                       menu={"Pengelolaan Admin"}
-                      path={"/admin/dashboard"}
+                      path={"/admin/adminmanagement"}
                   />
               </ul>
           </nav>

@@ -20,6 +20,9 @@ Route::get('/admin/dashboard', function () {
 Route::get('/admin/allOrders', function () {
     return Inertia::render('Admin/AllOrders');
 });
+Route::get('/admin/adminmanagement', function () {
+    return Inertia::render('Admin/AdminMangement');
+});
 
 
 // Route::get('/', function () {
