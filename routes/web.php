@@ -9,17 +9,33 @@ Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
 Route::get('/admin', function () {
+    if (Auth::check()) {
+        return redirect()->route('admin.dashboard');
+    }
+    
     return Inertia::render('Admin/Auth/Auth');
+})->name('admin.login');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return Inertia::render('Admin/Dashboard');
+    })->name('admin.dashboard');
+    Route::get('/admin/AllOrders', function () {
+        return Inertia::render('Admin/AllOrders');
+    });    
+    
 });
-Route::get('/admin/register', function () {
-    return Inertia::render('Admin/Auth/Register');
-});
-Route::get('/admin/dashboard', function () {
-    return Inertia::render('Admin/Dashboard');
-});
-Route::get('/admin/allOrders', function () {
-    return Inertia::render('Admin/AllOrders');
-});
+
+
+// Route::middleware(['auth'])->group(function () {
+
+//     Route::get('/admin/dashboard', function () {
+//         return Inertia::render('Admin/Dashboard');
+//     })->name('admin.dashboard');
+
+//     Route::get('/admin/allOrders', function () {
+//         return Inertia::render('Admin/AllOrders');
+//     });
+// });
 
 
 // Route::get('/', function () {

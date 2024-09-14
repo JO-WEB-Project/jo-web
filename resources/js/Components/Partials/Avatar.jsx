@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { LuSettings } from "react-icons/lu";
 import { TbLogout } from "react-icons/tb";
+import { useForm, usePage } from "@inertiajs/react";
 
 
 const Avatar = () => {
@@ -9,10 +10,11 @@ const Avatar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const avatarRef = useRef(null);
 
-    const role = "Owner";
+    const { auth } = usePage().props;
 
-    const fullName = "Fawwaz Fiebry Prayhoga Putra";
-    const firstName = fullName.split(" ")[0]; // Mengambil 1 kata depan
+    const fullName = auth.user?.name || 'Guest';
+    const role = auth.user?.role || 'Guest';
+    const firstName = fullName.split(" ")[0];
 
     // Menampilkan dan menyembunyikan tooltip
     const toggleTooltip = (visible) => {
@@ -41,6 +43,11 @@ const Avatar = () => {
         };
     }, []);
 
+    const { post } = useForm();
+    const handleLogout = () => {
+        post(route("logout"));
+    };
+    
     return (
         <div
             className="group relative inline-block rounded-lg hover:bg-slate-100 p-2 px-4"
@@ -88,7 +95,10 @@ const Avatar = () => {
                                 <LuSettings size={20} /> Settings
                             </span>
                         </li>
-                        <li className="px-4 py-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer">
+                        <li
+                            className="px-4 py-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer"
+                            onClick={handleLogout} 
+                        >
                             <span className="flex gap-4 text-sm items-center">
                                 <TbLogout size={20} /> Log out
                             </span>

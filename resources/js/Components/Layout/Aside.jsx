@@ -39,7 +39,7 @@ const Aside = () => {
                   <AsideMenu
                       icon={<LuScrollText size={20} />}
                       menu={"Semua Pesanan"}
-                      path={"/admin/allOrders"}
+                      path={"/admin/AllOrders"}
                   />
                   <AsideMenu
                       icon={<GoRows size={20} />}
