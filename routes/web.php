@@ -1,68 +1,40 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\AdminManagementController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
+
 Route::get('/admin', function () {
     if (Auth::check()) {
         return redirect()->route('admin.dashboard');
     }
-    
     return Inertia::render('Admin/Auth/Auth');
 })->name('admin.login');
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
-    Route::get('/admin/AllOrders', function () {
-        return Inertia::render('Admin/AllOrders');
-    });    
-    Route::get('/admin/adminmanagement', function () {
-        return Inertia::render('Admin/AdminMangement');
-    });
-    
+
+    Route::get('/admin/dashboard', [AdminManagementController::class, 'dashboard'])->name('admin.dashboard');
+
+    Route::get('/admin/AllOrders', [OrderController::class, 'allOrders'])->name('admin.allOrders');
+
+    Route::get('/admin/adminmanagement', [AdminManagementController::class, 'adminManagement'])->name('admin.management');
+
+    Route::post('/admin/pending-admins/{id}/approve', [AdminManagementController::class, 'approveAdmin'])->name('admin.approve');
+    Route::post('/admin/pending-admins/{id}/reject', [AdminManagementController::class, 'rejectAdmin'])->name('admin.reject');
+
+    Route::post('/admin/admins/{id}/delete', [AdminManagementController::class, 'deleteAdmin'])->name('admin.delete');
+    Route::post('/admin/admins/{id}/update', [AdminManagementController::class, 'updateAdmin'])->name('admin.update');
 });
 
-
-// Route::middleware(['auth'])->group(function () {
-
-//     Route::get('/admin/dashboard', function () {
-//         return Inertia::render('Admin/Dashboard');
-//     })->name('admin.dashboard');
-
-//     Route::get('/admin/allOrders', function () {
-//         return Inertia::render('Admin/AllOrders');
-//     });
-// });
-
-
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-// // Rute Admin
-// Route::get('/admin', function () {
-//     return Inertia::render('admin/auth/Login');
-// })->middleware('guest');
+Route::get('/debug/pending-admins', function () {
+    $pendingAdmins = \App\Models\PendingAdmin::all();
+    return response()->json($pendingAdmins);
+});
 
 require __DIR__ . '/auth.php';

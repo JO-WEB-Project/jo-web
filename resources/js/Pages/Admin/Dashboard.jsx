@@ -5,16 +5,18 @@ import DashboardCard from "@/Components/Shared/DashboardCard";
 import DashboardCardGender from "@/Components/Shared/DashboardCardGender";
 import DashboardChart from "@/Components/Pages/Dashboard/DashboardChart";
 import DashboardDoughnutChart from "@/Components/Pages/Dashboard/DashboardDoughnutChart";
-import { usePage } from "@inertiajs/react"; // Import this to get current user info
+import Notifications from "@/Components/Partials/Notifications";
+import { usePage } from "@inertiajs/react";
 
 const Dashboard = () => {
-  const { auth } = usePage().props; // Get the logged-in user
+  const { auth, pendingAdmins } = usePage().props;
+  const userRole = auth.user.role;
+  console.log('Dashboard - pendingAdmins:', pendingAdmins);
 
-  // Censoring data for Admins, showing it to Owners
-  const censorData = (data) => (auth.user.role === "Admin" ? "****" : data);
+  const censorData = (data) => (userRole === "Admin" ? "****" : data);
   
   return (
-    <Layout>
+    <Layout userRole={userRole} pendingAdmins={pendingAdmins}>
       <div className="">
         <MainTitle
           title="Dashboard"
