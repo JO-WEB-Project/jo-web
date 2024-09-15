@@ -4,7 +4,7 @@ import { useForm } from '@inertiajs/react';
 const Register = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
-        username: '', // Added username field
+        username: '',
         email: '',
         password: '',
         password_confirmation: '',
