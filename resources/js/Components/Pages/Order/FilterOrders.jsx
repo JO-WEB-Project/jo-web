@@ -29,7 +29,7 @@ const FilterOrders = () => {
 
     return (
         <div className="w-full flex flex-row justify-between mb-4">
-            <div className="bg-white shadow-md w-auto px-3 flex flex-row gap-2 rounded-lg border-[0.1px] border-black border-opacity-60 justify-center items-center">
+            <div className="bg-white w-auto px-3 flex flex-row gap-2 rounded-lg border-[0.1px] border-black border-opacity-60 justify-center items-center">
                 <LuFilter size={25} color="gray" className="w-16" />
                 <FilterCategory
                     title="Pengiriman"
@@ -56,7 +56,7 @@ const FilterOrders = () => {
                     )}
                 </div>
             </div>
-            <div className="bg-white shadow-md w-[500px] px-3 flex flex-row gap-2 rounded-lg border-[0.1px] border-black border-opacity-60 justify-start items-center">
+            <div className="bg-white w-[500px] px-3 flex flex-row gap-2 rounded-lg border-[0.1px] border-black border-opacity-60 justify-start items-center">
                 <FiSearch size={25} color="black" />
                 <input
                     style={{

@@ -9,6 +9,12 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('LandingPage');
 });
+Route::get('Admin/ProfileSetting', function () {
+    return Inertia::render('Admin/ProfileSetting');
+});
+Route::get('Admin/AccountSetting', function () {
+    return Inertia::render('Admin/AccountSetting');
+});
 
 Route::get('/admin', function () {
     if (Auth::check()) {
@@ -22,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminManagementController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/admin/AllOrders', [OrderController::class, 'allOrders'])->name('admin.allOrders');
+    // Route::get('/admin/AccountSetting', [OrderController::class, 'accountSetting'])->name('admin.accountSetting');
 
     Route::get('/admin/adminmanagement', [AdminManagementController::class, 'adminManagement'])->name('admin.management');
 

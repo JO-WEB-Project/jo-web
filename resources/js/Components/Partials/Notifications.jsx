@@ -162,6 +162,11 @@ const Notifications = ({ pendingAdmins = [] }) => {
         className="group p-2 text-gray-600 hover:bg-gray-200 rounded-lg focus:outline-none"
       >
         <GoBellFill size={22} className="group-hover:text-black" />
+
+        {/* ini buat banyaknya notifikasi baru yang belum dibaca */}
+        <span className="absolute justify-center items-center rounded-full min-h-3 min-w-3 px-1 font-bold -translate-y-7 ml-1 bg-red-600 text-[9px] text-white">
+          25
+        </span>
       </button>
 
       {isOpen && (

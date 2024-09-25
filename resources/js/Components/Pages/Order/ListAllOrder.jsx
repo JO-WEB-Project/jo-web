@@ -66,7 +66,7 @@ const ListAllOrder = ({ data, index }) => {
     };
 
     return (
-        <div className="mb-2 hover:bg-slate-100 bg-white shadow-md w-auto grid grid-cols-12 gap-2 rounded-lg border-[0.1px] border-black border-opacity-60 justify-center items-center">
+        <div className="mb-2 hover:bg-slate-100 hover:bg-opacity-60 bg-white w-auto grid grid-cols-12 gap-2 rounded-lg border-[0.1px] border-gray-300 shadow-none justify-center items-center">
             <div className="flex col-span-1 border-r border-black border-opacity-10 w-auto h-full px-4 py-2 font-bold flex-col justify-center items-center">
                 {index + 1}
             </div>
@@ -82,7 +82,7 @@ const ListAllOrder = ({ data, index }) => {
             <div className="flex col-span-2 border-r border-black border-opacity-10 w-auto h-full px-4 py-2 font-medium text-sm flex-col justify-center items-center">
                 <button
                     onClick={handleDetailClick}
-                    className="flex flex-row justify-center items-center px-6 py-2 rounded-lg hover:bg-gray-200"
+                    className="flex flex-row justify-center items-center px-6 py-2 rounded-lg hover:bg-white"
                 >
                     <IoIosInformationCircleOutline size={20} />
                     <p className="ml-2 text-sm font-medium text-black">
@@ -93,7 +93,7 @@ const ListAllOrder = ({ data, index }) => {
             <div className="flex col-span-2 border-black border-opacity-10 w-auto h-full px-2 py-2 font-medium text-sm flex-col justify-center items-center">
                 <button
                     onClick={handleActionClick}
-                    className="flex flex-row justify-center rounded-lg items-center w-auto hover:bg-gray-200 p-2"
+                    className="flex flex-row justify-center rounded-lg items-center w-auto hover:bg-white p-2"
                 >
                     <BiGridSmall size={20} />
                 </button>

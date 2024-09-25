@@ -91,13 +91,15 @@ const Avatar = () => {
                     </div>
                     <ul className="py-2">
                         <li className="px-4 py-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer">
-                            <span className="flex gap-4 text-sm items-center">
-                                <LuSettings size={20} /> Settings
-                            </span>
+                            <a href="/Admin/ProfileSetting">
+                                <span className="flex gap-4 text-sm items-center">
+                                    <LuSettings size={20} /> Settings
+                                </span>
+                            </a>
                         </li>
                         <li
                             className="px-4 py-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer"
-                            onClick={handleLogout} 
+                            onClick={handleLogout}
                         >
                             <span className="flex gap-4 text-sm items-center">
                                 <TbLogout size={20} /> Log out
