@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useForm, usePage } from '@inertiajs/react';
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { IoEyeSharp } from "react-icons/io5";
 import LayoutSetting from "@/Components/Layout/LayoutSetting";
@@ -6,24 +7,59 @@ import MainTitle from "@/Components/Shared/MainTitle";
 import Toaster from "@/Components/Toaster/Toaster";
 
 const AccountSetting = () => {
-    const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] =
-        useState(false);
+    const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
     const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
-    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-        useState(false);
+    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+
+    const { data, setData, post, processing, errors } = useForm({
+        email: '',
+        current_password: '',
+        new_password: '',
+        new_password_confirmation: '',
+    });
 
     const [showToaster, setShowToaster] = useState(false);
+    const [toasterType, setToasterType] = useState('');
+    const [toasterMessage, setToasterMessage] = useState('');
 
-    // Function to handle "Save Changes" button click
-    const handleSaveChanges = () => {
-        setShowToaster(true);
+    const { auth, pendingAdmins } = usePage().props;
+    const userRole = auth.user.role
 
-        setTimeout(() => {
-            setShowToaster(false);
-        }, 5000); 
+    useEffect(() => {
+        if (auth && auth.user) {
+            setData('email', auth.user.email);
+        }
+    }, [auth, setData]);
+
+    const handleSaveChanges = (e) => {
+        e.preventDefault();
+    
+        setShowToaster(false);
+    
+        post('/account-settings', {
+            preserveScroll: true,
+            onSuccess: () => {
+                setData('current_password', '');
+                setData('new_password', '');
+                setData('new_password_confirmation', '');
+    
+                setToasterType('success');
+                setToasterMessage('Account settings updated successfully.');
+                setShowToaster(true);
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            },
+            onError: () => {
+                setToasterType('warning');
+                setToasterMessage('Failed to save changes. Please check the form for errors.');
+                setShowToaster(true);
+            },
+        });
     };
+    
 
-    // Function buat lihat passwordnya
     const toggleCurrentPasswordVisibility = () => {
         setIsCurrentPasswordVisible((prevState) => !prevState);
     };
@@ -37,7 +73,7 @@ const AccountSetting = () => {
     };
 
     return (
-        <LayoutSetting>
+        <LayoutSetting userRole={userRole} pendingAdmins={pendingAdmins}>
             <MainTitle
                 title="Account Setting"
                 description="This is how others will see you on the site."
@@ -52,13 +88,18 @@ const AccountSetting = () => {
                         Email
                     </label>
                     <input
-                        className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 text-black text-opacity-80 rounded-lg placeholder:text-sm placeholder:font-semibold border-gray-300 focus:outline-none focus:border-black focus:ring-0"
+                        className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 px-3 text-black text-opacity-80 rounded-lg placeholder:text-sm placeholder:font-semibold border-gray-300 focus:outline-none focus:border-black focus:ring-0 border"
                         type="email"
-                        placeholder="dimasfierby@gmail.com"
+                        name="email"
+                        placeholder="Your email"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
                     />
+                    {errors.email && (
+                        <span className="text-red-500 text-sm">{errors.email}</span>
+                    )}
                     <p className="text-sm text-opacity-60 text-black font-medium">
-                        You can manage verified email addresses in your email
-                        settings.
+                        You can manage verified email addresses in your email settings.
                     </p>
                 </div>
 
@@ -68,12 +109,18 @@ const AccountSetting = () => {
                         className="block text-sm font-bold text-gray-700"
                         htmlFor="current-password"
                     >
-                        Password
+                        Current Password
                     </label>
-                    <div className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 text-black text-opacity-60 flex flex-row justify-between pr-6 rounded-lg border px-3 border-gray-300">
-                        <p className="text-sm font-semibold">
-                            {isCurrentPasswordVisible ? "Yhoga123" : "*******"}
-                        </p>
+                    <div className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 flex flex-row justify-between rounded-lg border px-3 border-gray-300">
+                        <input
+                            className="rounded-lg border-none w-full py-0 outline-none focus:ring-0 placeholder:text-sm"
+                            type={isCurrentPasswordVisible ? "text" : "password"}
+                            placeholder="Current password"
+                            name="current_password"
+                            autoComplete="new-password"
+                            value={data.current_password}
+                            onChange={(e) => setData('current_password', e.target.value)}
+                        />
                         <button onClick={toggleCurrentPasswordVisibility}>
                             {isCurrentPasswordVisible ? (
                                 <IoEyeSharp />
@@ -82,8 +129,11 @@ const AccountSetting = () => {
                             )}
                         </button>
                     </div>
+                    {errors.current_password && (
+                        <span className="text-red-500 text-sm">{errors.current_password}</span>
+                    )}
                     <p className="text-sm text-opacity-60 text-black font-medium">
-                        This is your current password.
+                        Please enter your current password.
                     </p>
                 </div>
 
@@ -95,11 +145,14 @@ const AccountSetting = () => {
                     >
                         New Password
                     </label>
-                    <div className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 text-black text-opacity-60 flex flex-row justify-between pr-6 rounded-lg border px-0 border-gray-300">
+                    <div className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 flex flex-row justify-between rounded-lg border px-3 border-gray-300">
                         <input
                             className="border-none w-full py-0 outline-none focus:ring-0 placeholder:text-sm"
                             type={isNewPasswordVisible ? "text" : "password"}
                             placeholder="New password"
+                            name="new_password"
+                            value={data.new_password}
+                            onChange={(e) => setData('new_password', e.target.value)}
                         />
                         <button onClick={toggleNewPasswordVisibility}>
                             {isNewPasswordVisible ? (
@@ -109,6 +162,9 @@ const AccountSetting = () => {
                             )}
                         </button>
                     </div>
+                    {errors.new_password && (
+                        <span className="text-red-500 text-sm">{errors.new_password}</span>
+                    )}
                     <p className="text-sm text-opacity-60 text-black font-medium">
                         Please enter your new password.
                     </p>
@@ -122,13 +178,14 @@ const AccountSetting = () => {
                     >
                         Confirm New Password
                     </label>
-                    <div className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 text-black text-opacity-60 flex flex-row justify-between pr-6 rounded-lg border px-0 border-gray-300">
+                    <div className="min-w-[400px] max-w-[600px] text-sm font-medium py-2 flex flex-row justify-between rounded-lg border px-3 border-gray-300">
                         <input
                             className="border-none w-full py-0 outline-none focus:ring-0 placeholder:text-sm"
-                            type={
-                                isConfirmPasswordVisible ? "text" : "password"
-                            }
+                            type={isConfirmPasswordVisible ? "text" : "password"}
                             placeholder="Confirm password"
+                            name="new_password_confirmation"
+                            value={data.new_password_confirmation}
+                            onChange={(e) => setData('new_password_confirmation', e.target.value)}
                         />
                         <button onClick={toggleConfirmPasswordVisibility}>
                             {isConfirmPasswordVisible ? (
@@ -138,6 +195,9 @@ const AccountSetting = () => {
                             )}
                         </button>
                     </div>
+                    {errors.new_password_confirmation && (
+                        <span className="text-red-500 text-sm">{errors.new_password_confirmation}</span>
+                    )}
                     <p className="text-sm text-opacity-60 text-black font-medium">
                         Please confirm your new password.
                     </p>
@@ -147,14 +207,15 @@ const AccountSetting = () => {
                 <button
                     className="px-4 py-3 rounded-lg w-32 text-sm font-semibold bg-black bg-opacity-100 hover:bg-opacity-80 text-white"
                     onClick={handleSaveChanges}
+                    disabled={processing}
                 >
-                    Save Changes
+                    {processing ? 'Saving...' : 'Save Changes'}
                 </button>
 
                 {showToaster && (
                     <Toaster
-                        type="success"
-                        message="Changes saved successfully!"
+                        type={toasterType}
+                        message={toasterMessage}
                     />
                 )}
             </div>

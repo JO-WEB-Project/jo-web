@@ -2,18 +2,15 @@
 
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AccountSettingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('LandingPage');
-});
-Route::get('Admin/ProfileSetting', function () {
-    return Inertia::render('Admin/ProfileSetting');
-});
-Route::get('Admin/AccountSetting', function () {
-    return Inertia::render('Admin/AccountSetting');
 });
 
 Route::get('/admin', function () {
@@ -37,6 +34,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/admin/admins/{id}/delete', [AdminManagementController::class, 'deleteAdmin'])->name('admin.delete');
     Route::post('/admin/admins/{id}/update', [AdminManagementController::class, 'updateAdmin'])->name('admin.update');
+    Route::post('/account-settings', [UserController::class, 'updateAccountSettings'])->name('account.update');
+
+    Route::get('/Admin/ProfileSetting', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/Admin/ProfileSetting', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/Admin/AccountSetting', [AccountSettingController::class, 'edit'])->name('account.setting');
+
+    
 });
 
 Route::get('/debug/pending-admins', function () {

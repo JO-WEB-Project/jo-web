@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FiLogOut } from "react-icons/fi";
-import { LuSettings } from "react-icons/lu";
-import { TbLogout } from "react-icons/tb";
-import { useForm, usePage } from "@inertiajs/react";
-
+import React, { useState, useRef, useEffect } from 'react';
+import { FiLogOut } from 'react-icons/fi';
+import { LuSettings } from 'react-icons/lu';
+import { TbLogout } from 'react-icons/tb';
+import { useForm, usePage } from '@inertiajs/react';
 
 const Avatar = () => {
     const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -14,7 +13,8 @@ const Avatar = () => {
 
     const fullName = auth.user?.name || 'Guest';
     const role = auth.user?.role || 'Guest';
-    const firstName = fullName.split(" ")[0];
+    const firstName = fullName.split(' ')[0];
+    const profilePicture = auth.user?.profile_picture || '/Assets/Images/Logo.png';
 
     // Menampilkan dan menyembunyikan tooltip
     const toggleTooltip = (visible) => {
@@ -61,9 +61,9 @@ const Avatar = () => {
                 className="group-hover:cursor-pointer flex items-center"
             >
                 <img
-                    src="/Assets/Images/Logo.png"
+                    src={profilePicture}
                     alt="User Avatar"
-                    className="w-6 rounded-full"
+                    className="w-6 h-6 rounded-full object-cover"
                 />
                 <span className="ml-2 text-xs font-semibold text-black text-opacity-60">
                     {firstName}

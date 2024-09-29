@@ -14,30 +14,38 @@ use Inertia\Response;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Update the user's profile information.
      */
-    public function edit(Request $request): Response
+    public function edit(): Response
     {
-        return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
+        $userRole = Auth::user()->role;
+        $pendingAdmins = ($userRole === 'Owner') ? \App\Models\PendingAdmin::all() : null;
+    
+        return Inertia::render('Admin/ProfileSetting', [
+            'pendingAdmins' => $pendingAdmins,
+            'userRole' => $userRole,
         ]);
     }
+    
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request)
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = Auth::user();
+    
+        // Update user data
+        $user->name = $request->input('name');
+        $user->username = $request->input('username');
+    
+        if ($request->filled('profile_picture_url')) {
+            $user->profile_picture = $request->input('profile_picture_url');
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit');
+    
+        $user->save();
+    
+        return Redirect::route('profile.edit')->with('success', 'Profile updated successfully.');
     }
 
     /**

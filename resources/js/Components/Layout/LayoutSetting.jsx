@@ -5,10 +5,10 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import AsideMenu from "@/Components/Partials/AsideMenu";
 import { LuSettings } from "react-icons/lu";
 
-const LayoutSetting = ( {children}) => {
+const LayoutSetting = ( {userRole, pendingAdmins, children}) => {
     return (
         <div className="flex flex-col max-h-screen">
-            <Header />
+            <Header pendingAdmins={pendingAdmins} userRole={userRole}/>
             <div className="pl-10 pt-6 flex flex-col gap-4 max-h-screen overflow-hidden">
                 <div className="flex flex-col justify-center gap-2 mb-0 pr-10">
                     <div className="flex flex-row gap-2 items-start">

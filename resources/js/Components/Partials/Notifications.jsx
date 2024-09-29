@@ -109,12 +109,6 @@ const NotificationsRegister = ({ pendingAdmins = [] }) => {
                 Cancel
               </button>
               <button
-                onClick={handleReject}
-                className="bg-red-400 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-md"
-              >
-                Tolak
-              </button>
-              <button
                 onClick={handleApprove}
                 className="bg-green-400 hover:bg-green-500 text-white font-semibold py-2 px-4 rounded-md"
               >
@@ -134,6 +128,14 @@ const Notifications = ({ pendingAdmins = [] }) => {
 
   const { auth } = usePage().props;
   const userRole = auth.user.role;
+
+  const safePendingAdmins = pendingAdmins || [];
+
+  const orderNotificationsCount = 1;
+
+  const registerNotificationsCount = safePendingAdmins.length;
+
+  const totalNotificationCount = orderNotificationsCount + registerNotificationsCount;
 
   const toggleNotifications = () => {
     setIsOpen(!isOpen);
@@ -163,10 +165,11 @@ const Notifications = ({ pendingAdmins = [] }) => {
       >
         <GoBellFill size={22} className="group-hover:text-black" />
 
-        {/* ini buat banyaknya notifikasi baru yang belum dibaca */}
-        <span className="absolute justify-center items-center rounded-full min-h-3 min-w-3 px-1 font-bold -translate-y-7 ml-1 bg-red-600 text-[9px] text-white">
-          25
-        </span>
+        {totalNotificationCount > 0 && (
+          <span className="absolute justify-center items-center rounded-full min-h-3 min-w-3 px-1 font-bold -translate-y-7 ml-1 bg-red-600 text-[9px] text-white">
+            {totalNotificationCount}
+          </span>
+        )}
       </button>
 
       {isOpen && (
@@ -175,10 +178,10 @@ const Notifications = ({ pendingAdmins = [] }) => {
             <p className="text-md font-semibold">Notifications</p>
           </div>
           <div className="px-1 overflow-scroll h-56 py-1 flex flex-col items-start">
-            <NotificationsOrder />
+            <NotificationsOrder /> {/* Currently static */}
 
-            {userRole === "Owner" && pendingAdmins && (
-              <NotificationsRegister pendingAdmins={pendingAdmins} />
+            {userRole === "Owner" && safePendingAdmins.length > 0 && (
+              <NotificationsRegister pendingAdmins={safePendingAdmins} />
             )}
           </div>
         </div>
